@@ -9,18 +9,21 @@
     <Input :task="task"/>
   </form>
   <hr>
-  <p>
-    {{ task }}
-  </p>
+  <ListTasks />
+
 </template>
 
 <script>
 import Input from '../components/Input.vue'
+import ListTasks from '../components/ListTasks.vue'
+import {mapActions} from 'vuex'
+const shortid = require('shortid'); // call ids
+
 
 export default {
   name: 'Home',
   components: {
-    Input
+    Input, ListTasks
   },
   data() {
     return {
@@ -35,6 +38,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setTasks']),
     processForm() {
       // Here send the data
       console.log(this.task)
@@ -45,8 +49,16 @@ export default {
       }
       // console.log("it is not empty")
 
+      // generate id
+      this.task.id = shortid.generate()
+      console.log(this.task.id)
+
+      // send data
+      this.setTasks(this.task)
+
       // Here clean the data
       this.task = {
+        id : '',
         name: '',
         categories: [],
         state: '',
