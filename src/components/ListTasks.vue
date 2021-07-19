@@ -17,23 +17,47 @@
         <td>{{item.name}}</td>
         <td >
           <span v-for="(cat, index) in item.categories" :key="index">
-              {{cat}}
+              {{
+                  item.categories.length === index + 1 ? cat : cat + ', '
+              }}
           </span>
         </td>
         <td>{{item.state}}</td>
         <td>{{item.number}}</td>
-        <td>Action</td>
+        <td>
+          <router-link
+            class="btn btn-warning mr-2 btn-sm"
+            :to="{
+              name: 'Edit',
+              params: {
+                id: item.id
+              }
+            }"
+          >
+            Edit
+          </router-link>
+          <!-- button is inside the for so it's assigned the id -->
+          <button 
+            class="btn btn-danger btn-sm"
+            @click="deleteTasks(item.id)"
+          >
+            Delete
+          </button>
+        </td>
     </tr>
   </tbody>
 </table>
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 
 export default {
     computed: {
         ...mapState(['tasks'])
+    },
+    methods: {
+      ...mapActions(['deleteTasks'])
     }
 }
 </script>
